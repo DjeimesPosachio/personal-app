@@ -3,12 +3,10 @@ import React, {useContext, useState} from 'react';
 import {
   StyleSheet,
   TouchableOpacity,
-  Keyboard,
-  TouchableWithoutFeedback,
   Image,
   View,
+  KeyboardAvoidingView,
 } from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {Button, Text} from 'react-native-paper';
 import PasswordInput from '../../components/PasswordInput';
 import {AuthContext} from '../../context/AuthContext';
@@ -17,8 +15,8 @@ import EmailInput from '../../components/TelefoneInput';
 const LoginScreen = ({navigation}) => {
   const {login} = useContext(AuthContext);
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('aluno@aluno.com.br');
+  const [password, setPassword] = useState('admin1234');
   const [showPassword, setShowPassword] = useState(true);
 
   const handleLogin = () => {
@@ -26,42 +24,42 @@ const LoginScreen = ({navigation}) => {
   };
 
   return (
-    <TouchableWithoutFeedback
-      touchSoundDisabled
-      onPress={() => Keyboard.dismiss()}>
-      <SafeAreaView style={styles.container}>
-        <Image source={require('../../assets/logo.png')} style={styles.logo} />
+    <KeyboardAvoidingView
+      behavior="padding"
+      enabled={true}
+      style={styles.container}>
+      <Image source={require('../../assets/logo.png')} style={styles.logo} />
 
-        <View style={styles.login}>
-          <Text style={styles.loginText}>Login</Text>
+      <View style={styles.login}>
+        <Text style={styles.loginText}>Login</Text>
 
-          <EmailInput value={email} setValue={setEmail} />
+        <EmailInput value={email} setValue={setEmail} />
 
-          <PasswordInput
-            value={password}
-            setValue={setPassword}
-            showPassword={showPassword}
-            setShowPassword={setShowPassword}
-          />
+        <PasswordInput
+          value={password}
+          setValue={setPassword}
+          showPassword={showPassword}
+          setShowPassword={setShowPassword}
+        />
 
-          <Button
-            mode="contained"
-            style={styles.loginButton}
-            onPress={handleLogin}>
-            Login
-          </Button>
-        </View>
+        <Button
+          mode="contained"
+          style={styles.loginButton}
+          onPress={handleLogin}>
+          ENTRAR
+        </Button>
+      </View>
+
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('SignUp');
+        }}>
         <Text style={styles.esqueceuSenhaText}>
           Esqueceu sua senha?{' '}
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('SignUp');
-            }}>
-            <Text style={styles.recuperarSenhaText}>RECUPERAR</Text>
-          </TouchableOpacity>
+          <Text style={styles.recuperarSenhaText}>RECUPERAR</Text>
         </Text>
-      </SafeAreaView>
-    </TouchableWithoutFeedback>
+      </TouchableOpacity>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -79,7 +77,6 @@ const styles = StyleSheet.create({
   },
   login: {
     marginBottom: 10,
-    color: 'white',
     marginHorizontal: 30,
   },
   loginText: {

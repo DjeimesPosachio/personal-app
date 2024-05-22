@@ -1,41 +1,34 @@
 /* eslint-disable prettier/prettier */
-import React from 'react';
-import { StyleSheet, View, FlatList } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { StyleSheet, View, FlatList, RefreshControl } from 'react-native';
 import { List } from 'react-native-paper';
+import { createAxios } from '../../utils/axios-helper';
 
 const DietaScreen = () => {
-    const dietas = [
-        {
-            id: '1',
-            titulo: 'Dieta 1',
-            descricao: 'Refeições balanceadas para ganho de massa muscular',
-            alimentos: ['Frango grelhado', 'Arroz integral', 'Brócolis', 'Ovos'],
-        },
-        {
-            id: '2',
-            titulo: 'Dieta 2',
-            descricao: 'Refeições leves para perda de peso',
-            alimentos: ['Salada verde', 'Salmão grelhado', 'Quinoa', 'Frutas'],
-        },
-        {
-            id: '3',
-            titulo: 'Dieta 3',
-            descricao: 'Dieta vegetariana para saúde geral',
-            alimentos: ['Feijão', 'Lentilha', 'Tofu', 'Espinafre'],
-        },
-        {
-            id: '4',
-            titulo: 'Dieta 4',
-            descricao: 'Dieta cetogênica para queima de gordura',
-            alimentos: ['Carne vermelha', 'Abacate', 'Queijo', 'Azeite de oliva'],
-        },
-        {
-            id: '5',
-            titulo: 'Dieta 5',
-            descricao: 'Dieta rica em fibras para melhor digestão',
-            alimentos: ['Aveia', 'Maçã', 'Sementes de chia', 'Legumes'],
-        },
-    ];
+    const [loading, setLoading] = useState(false);
+    const [planejamento, setPlanejamento] = useState({});
+
+    const axios = createAxios();
+
+    const requestData = useCallback(() => {
+      setLoading(true);
+      axios
+        .get('/planejamento-dieta')
+        .then(response => {
+          setPlanejamento(response?.data);
+        })
+        .catch(error => console.log(error))
+        .finally(() => setLoading(false));
+    }, [axios]);
+
+    useEffect(() => {
+      requestData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const handleRefresh = useCallback(() => {
+      requestData();
+    }, [requestData]);
 
     const renderItem = ({ item }) => (
         <List.Accordion
@@ -44,7 +37,7 @@ const DietaScreen = () => {
             description={item.descricao}
             style={styles.card}
             titleStyle={{ color: 'white' }}>
-            {item.alimentos.map((alimento, index) => (
+            {item.refeicoes.map((alimento, index) => (
                 <List.Item key={index} title={alimento} titleStyle={{ color: 'white' }} />
             ))}
         </List.Accordion>
@@ -54,9 +47,15 @@ const DietaScreen = () => {
         <View style={styles.background}>
             <View style={styles.container}>
                 <FlatList
-                    data={dietas}
+                    data={planejamento}
                     renderItem={renderItem}
                     keyExtractor={item => item.id}
+                    refreshControl={
+                        <RefreshControl
+                          onRefresh={handleRefresh}
+                          refreshing={loading}
+                        />
+                      }
                 />
             </View>
         </View>
