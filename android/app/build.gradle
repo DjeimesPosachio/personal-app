@@ -2,7 +2,6 @@ apply plugin: "com.android.application"
 
 project.ext.envConfigFiles = [
     development: ".env.development",
-    stage: ".env.stage",
     production: ".env.production",
 ]
 
@@ -108,6 +107,20 @@ android {
             signingConfig signingConfigs.debug
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+        }
+    }
+
+    flavorDimensions "version"
+
+    productFlavors {
+        development {
+            dimension "version"
+            applicationIdSuffix ".dev"
+        }
+
+        production {
+            dimension "version"
+            applicationIdSuffix ""
         }
     }
 }
