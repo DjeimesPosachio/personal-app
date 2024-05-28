@@ -3,10 +3,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Axios from 'axios';
 
 import { KEY_TOKEN } from '../consts';
+import Config from 'react-native-config';
 
 export function createAxios(options) {
+
+    console.log('CONFIG.URL_API', Config.URL_API);
     const instance = Axios.create({
-        baseURL: 'http://localhost:8000/v1/app',
+        baseURL: Config.URL_API,
         headers: {
             'User-Agent': 'personal',
         },

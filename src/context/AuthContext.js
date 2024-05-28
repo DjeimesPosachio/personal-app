@@ -29,6 +29,7 @@ export const AuthProvider = ({ children }) => {
     const logout = () => {
         setUserToken(null);
         setLoading(false);
+        AsyncStorage.clear();
     };
 
     return (

@@ -1,9 +1,32 @@
 /* eslint-disable prettier/prettier */
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { TextInput } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+const PasswordInput = ({ value, setValue }) => {
 
-const PasswordInput = ({ value, setValue, showPassword, setShowPassword }) => {
+    const [showPassword, setShowPassword] = useState(false);
+
+    const tooglePasswordVisibility = useCallback(() => {
+        setShowPassword(prevState => !prevState);
+    }, []);
+
+    const render = useCallback(() => {
+        function renderIcon() {
+            return (
+                <Icon
+                    size={20}
+                    name={showPassword ? 'eye' : 'eye-slash'}
+                    onPress={tooglePasswordVisibility}
+                    color="#F7D100"
+                />
+            );
+        }
+
+        return (
+            <TextInput.Icon icon={renderIcon} />
+        );
+    }, [showPassword, tooglePasswordVisibility]);
 
     return (
         <>
@@ -15,23 +38,8 @@ const PasswordInput = ({ value, setValue, showPassword, setShowPassword }) => {
                 onChangeText={text => setValue(text)}
                 left={<TextInput.Icon name="lock" size={25} color="black" />}
                 secureTextEntry={showPassword}
-                right={
-                    showPassword ? (
-                        <TextInput.Icon
-                            name="eye"
-                            size={25}
-                            color="black"
-                            onPress={() => setShowPassword(!showPassword)}
-                        />
-                    ) : (
-                        <TextInput.Icon
-                            name="eye-off"
-                            size={25}
-                            color="black"
-                            onPress={() => setShowPassword(!showPassword)}
-                        />
-                    )
-                }
+                textColor="#F7D100"
+                right={render()}
             />
         </>
     );
