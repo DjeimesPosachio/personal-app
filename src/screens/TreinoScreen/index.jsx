@@ -1,12 +1,13 @@
 /* eslint-disable prettier/prettier */
-import React, {useCallback, useEffect, useState} from 'react';
-import {StyleSheet, View, FlatList, RefreshControl} from 'react-native';
-import {List} from 'react-native-paper';
-import {createAxios} from '../../utils/axios-helper';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { StyleSheet, View, FlatList, RefreshControl } from 'react-native';
+import { List, Text } from 'react-native-paper';
+import { createAxios } from '../../utils/axios-helper';
 
 const TreinoScreen = () => {
   const [loading, setLoading] = useState(false);
   const [planejamento, setPlanejamento] = useState({});
+  const flatListRef = useRef(null);
 
   const axios = createAxios();
 
@@ -16,6 +17,7 @@ const TreinoScreen = () => {
       .get('/planejamento-treino')
       .then(response => {
         setPlanejamento(response?.data);
+        flatListRef.current.scrollToEnd({ animated: false });
       })
       .catch(error => console.log(error))
       .finally(() => setLoading(false));
@@ -30,54 +32,80 @@ const TreinoScreen = () => {
     requestData();
   }, [requestData]);
 
-  const renderItem = ({item}) => (
-    <List.Accordion
-      key={item.id}
-      title={item.titulo}
-      description={item.descricao}
-      style={styles.card}
-      titleStyle={{color: 'white'}}>
-      {item.metricasExercicio.map((exercicio, index) => (
-        <List.Item
-          key={index}
-          title={`${exercicio.nomeExercicio} - ${exercicio.series} x ${exercicio.repeticoes}`}
-          titleStyle={{color: 'white'}}
-        />
-      ))}
-    </List.Accordion>
+  const renderItem = ({ item, index }) => (
+    <View style={[styles.cardContainer, index === 0 && { marginTop: 100 }]}>
+      <List.Accordion
+        key={item.id}
+        title={item.descricao}
+        style={styles.cardContent}
+        titleStyle={styles.descricaoText}
+        left={() => <Text style={styles.sequenciaTreino}>{item.sequenciaTreino}</Text>}
+      >
+        {item.metricasExercicio.map((exercicio, metricasIndex) => (
+          <View key={metricasIndex} style={styles.exercicioContainer}>
+            <Text style={styles.exercicioDescricao}>
+              {`${exercicio.nomeExercicio} - ${exercicio.series} x ${exercicio.repeticoes}`}
+            </Text>
+          </View>
+        ))}
+      </List.Accordion>
+    </View>
   );
 
+
   return (
-    <View style={styles.background}>
-      <View style={styles.container}>
-        <FlatList
-          data={planejamento?.treinos}
-          renderItem={renderItem}
-          refreshing={loading}
-          keyExtractor={item => item.id}
-          refreshControl={
-            <RefreshControl onRefresh={handleRefresh} refreshing={loading} />
-          }
-        />
-      </View>
+    <View style={styles.container}>
+      <FlatList
+        ref={flatListRef}
+        data={planejamento?.treinos}
+        renderItem={renderItem}
+        refreshing={loading}
+        keyExtractor={item => item.id}
+        contentContainerStyle={styles.content}
+        refreshControl={<RefreshControl onRefresh={handleRefresh} refreshing={loading} />}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  background: {
+  container: {
     flex: 1,
     backgroundColor: '#181A20',
     justifyContent: 'center',
+    paddingHorizontal: 20,
+    paddingTop: 50,
   },
-  container: {
-    flex: 1,
+  content: {
     backgroundColor: '#1F222A',
     padding: 10,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
   },
-  card: {
-    marginBottom: 10,
+  descricaoText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  cardContainer: {
     backgroundColor: '#181A20',
+    paddingVertical: 20,
+    marginBottom: 30,
+    borderRadius: 25,
+  },
+  cardContent: {
+    backgroundColor: '#181A20',
+  },
+  exercicioDescricao: {
+    color: 'white',
+    fontSize: 16,
+    marginLeft: 17,
+  },
+  sequenciaTreino: {
+    justifyContent: 'center',
+    marginLeft: 20,
+    fontSize: 50,
+    color: '#F7D100',
   },
 });
 
