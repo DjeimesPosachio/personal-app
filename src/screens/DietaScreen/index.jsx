@@ -32,16 +32,18 @@ const DietaScreen = () => {
     }, [requestData]);
 
 const renderItem = ({ item, index }) => (
-    <View style={[styles.cardContainer, index === 0 && { marginTop: 100 }]}>
+    <View style={[styles.cardContainer, index === 0 && { marginTop: 30 }]}>
       <List.Accordion
         key={item.id}
         title={item.descricao}
+        description={item.tipoRefeicao}
         style={styles.cardContent}
         titleStyle={styles.descricaoText}
+        descriptionStyle={styles.tipoRefeicaoText}
         left={() => <Text style={styles.horaRefeicao}>{item.horaRefeicao}</Text>}
       >
           <View style={styles.exercicioContainer}>
-            <Text style={styles.exercicioDescricao}>
+            <Text style={styles.alimentoDescricao}>
               {item?.descricao}
             </Text>
           </View>
@@ -49,6 +51,11 @@ const renderItem = ({ item, index }) => (
     </View>
   );
 
+  const renderHeader = () => (
+    <View style={styles.header}>
+      <Text style={styles.headerText}>User u. - Dietas</Text>
+    </View>
+  );
 
   return (
     <View style={styles.container}>
@@ -56,6 +63,7 @@ const renderItem = ({ item, index }) => (
         ref={flatListRef}
         data={planejamento?.refeicoes}
         renderItem={renderItem}
+        ListHeaderComponent={renderHeader}
         refreshing={loading}
         keyExtractor={item => item.id}
         contentContainerStyle={styles.content}
@@ -81,8 +89,14 @@ const styles = StyleSheet.create({
   },
   descricaoText: {
     color: 'white',
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
+  },
+  tipoRefeicaoText: {
+    color: 'white',
+    fontSize: 12,
+    fontWeight: 'bold',
+    marginTop: 5,
   },
   cardContainer: {
     backgroundColor: '#181A20',
@@ -93,17 +107,29 @@ const styles = StyleSheet.create({
   cardContent: {
     backgroundColor: '#181A20',
   },
-  exercicioDescricao: {
+  alimentoDescricao: {
     color: 'white',
     fontSize: 16,
-    marginLeft: 17,
+    marginLeft: -20,
+    marginBottom: 10,
   },
   horaRefeicao: {
     justifyContent: 'center',
     marginLeft: 20,
-    marginTop: 9,
+    marginTop: 16,
     fontSize: 16,
     color: '#F7D100',
+  },
+  header: {
+    backgroundColor: '#1F222A',
+    paddingVertical: 10,
+    alignItems: 'center',
+  },
+  headerText: {
+    color: 'white',
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginTop: 20,
   },
 });
 

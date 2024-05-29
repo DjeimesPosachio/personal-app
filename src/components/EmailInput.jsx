@@ -1,26 +1,17 @@
 /* eslint-disable prettier/prettier */
-import React, { useCallback } from 'react';
+import React, {useCallback} from 'react';
 import {StyleSheet} from 'react-native';
 import {TextInput} from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const EmailInput = ({value, setValue, color}) => {
-
-
   const render = useCallback(() => {
     function renderIcon() {
-        return (
-            <Icon
-                size={20}
-                name="at"
-                color="#F7D100"
-            />
-        );
+      return <Icon size={25} name="user" color="#F7D100" />;
     }
-    return (
-        <TextInput.Icon icon={renderIcon} />
-    );
-}, []);
+    return <TextInput.Icon icon={renderIcon} />;
+  }, []);
+
   return (
     <>
       <TextInput

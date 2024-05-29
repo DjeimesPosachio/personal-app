@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { StyleSheet, View, FlatList, RefreshControl } from 'react-native';
-import { List, Text } from 'react-native-paper';
-import { createAxios } from '../../utils/axios-helper';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {StyleSheet, View, FlatList, RefreshControl} from 'react-native';
+import {List, Text} from 'react-native-paper';
+import {createAxios} from '../../utils/axios-helper';
 
 const TreinoScreen = () => {
   const [loading, setLoading] = useState(false);
@@ -17,7 +17,7 @@ const TreinoScreen = () => {
       .get('/planejamento-treino')
       .then(response => {
         setPlanejamento(response?.data);
-        flatListRef.current.scrollToEnd({ animated: false });
+        flatListRef.current.scrollToEnd({animated: false});
       })
       .catch(error => console.log(error))
       .finally(() => setLoading(false));
@@ -32,15 +32,16 @@ const TreinoScreen = () => {
     requestData();
   }, [requestData]);
 
-  const renderItem = ({ item, index }) => (
-    <View style={[styles.cardContainer, index === 0 && { marginTop: 100 }]}>
+  const renderItem = ({item, index}) => (
+    <View style={[styles.cardContainer, index === 0 && {marginTop: 30}]}>
       <List.Accordion
         key={item.id}
         title={item.descricao}
         style={styles.cardContent}
         titleStyle={styles.descricaoText}
-        left={() => <Text style={styles.sequenciaTreino}>{item.sequenciaTreino}</Text>}
-      >
+        left={() => (
+          <Text style={styles.sequenciaTreino}>{item.sequenciaTreino}</Text>
+        )}>
         {item.metricasExercicio.map((exercicio, metricasIndex) => (
           <View key={metricasIndex} style={styles.exercicioContainer}>
             <Text style={styles.exercicioDescricao}>
@@ -52,6 +53,11 @@ const TreinoScreen = () => {
     </View>
   );
 
+  const renderHeader = () => (
+    <View style={styles.header}>
+      <Text style={styles.headerText}>User u. - Treinos</Text>
+    </View>
+  );
 
   return (
     <View style={styles.container}>
@@ -59,10 +65,13 @@ const TreinoScreen = () => {
         ref={flatListRef}
         data={planejamento?.treinos}
         renderItem={renderItem}
+        ListHeaderComponent={renderHeader}
         refreshing={loading}
         keyExtractor={item => item.id}
         contentContainerStyle={styles.content}
-        refreshControl={<RefreshControl onRefresh={handleRefresh} refreshing={loading} />}
+        refreshControl={
+          <RefreshControl onRefresh={handleRefresh} refreshing={loading} />
+        }
       />
     </View>
   );
@@ -84,7 +93,7 @@ const styles = StyleSheet.create({
   },
   descricaoText: {
     color: 'white',
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
   },
   cardContainer: {
@@ -99,13 +108,25 @@ const styles = StyleSheet.create({
   exercicioDescricao: {
     color: 'white',
     fontSize: 16,
-    marginLeft: 17,
+    marginLeft: -20,
+    marginBottom: 10,
   },
   sequenciaTreino: {
-    justifyContent: 'center',
     marginLeft: 20,
-    fontSize: 50,
+    fontSize: 30,
     color: '#F7D100',
+    marginTop: -3,
+  },
+  header: {
+    backgroundColor: '#1F222A',
+    paddingVertical: 10,
+    alignItems: 'center',
+  },
+  headerText: {
+    color: 'white',
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginTop: 20,
   },
 });
 

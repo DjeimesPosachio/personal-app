@@ -10,10 +10,10 @@ import {
 import {Button, Text} from 'react-native-paper';
 import PasswordInput from '../../components/PasswordInput';
 import {AuthContext} from '../../context/AuthContext';
-import EmailInput from '../../components/TelefoneInput';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { KEY_URL_PADRAO } from '../../consts';
 import Config from 'react-native-config';
+import EmailInput from '../../components/EmailInput';
 
 const LoginScreen = ({navigation}) => {
   const {login} = useContext(AuthContext);
