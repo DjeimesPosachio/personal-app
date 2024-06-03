@@ -17,7 +17,6 @@ const AppNav = () => {
 
     if (bundleId === 'com.personalapp.dev') {
          AsyncStorage.getItem(KEY_URL_PADRAO).then((res) => {
-            console.log('UUUUUR', JSON.parse(res).url);
             Config.URL_API = JSON.parse(res).url || Config.URL_API;
         });
     }

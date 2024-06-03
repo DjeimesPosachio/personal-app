@@ -18,8 +18,8 @@ import EmailInput from '../../components/EmailInput';
 const LoginScreen = ({navigation}) => {
   const {login} = useContext(AuthContext);
 
-  const [email, setEmail] = useState('aluno@aluno.com.br');
-  const [password, setPassword] = useState('admin1234');
+  const [email, setEmail] = useState('cariani@gmail.com');
+  const [password, setPassword] = useState('123456');
   const [showPassword, setShowPassword] = useState(true);
 
   useEffect(() => {
@@ -37,6 +37,7 @@ const LoginScreen = ({navigation}) => {
 
     recuperarItem();
   }, []);
+
   const handleLogin = () => {
     login(email, password);
   };

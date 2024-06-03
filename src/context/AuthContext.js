@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { createContext, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { KEY_TOKEN, KEY_USUARIO } from '../consts';
 import { createAxios } from '../utils/axios-helper';
 
@@ -21,6 +21,8 @@ export const AuthProvider = ({ children }) => {
             setUserToken(response?.data?.token);
             AsyncStorage.setItem(KEY_TOKEN, JSON.stringify(response?.data?.token));
             AsyncStorage.setItem(KEY_USUARIO, JSON.stringify(response?.data?.usuario));
+
+            console.log('TOKEN', response.data.token);
         } catch (error) {
             console.error(error);
         }
@@ -31,6 +33,24 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
         AsyncStorage.clear();
     };
+
+    const isLoggedIn = async () => {
+        try {
+            setLoading(true);
+            let loggedUserToken = await AsyncStorage.getItem(KEY_TOKEN);
+
+            if (loggedUserToken) {
+                setUserToken(loggedUserToken);
+            }
+            setLoading(false);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    useEffect(() => {
+        isLoggedIn();
+    }, []);
 
     return (
         <AuthContext.Provider value={{ login, logout, loading, userToken }}>
