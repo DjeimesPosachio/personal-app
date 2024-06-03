@@ -21,8 +21,6 @@ export const AuthProvider = ({ children }) => {
             setUserToken(response?.data?.token);
             AsyncStorage.setItem(KEY_TOKEN, JSON.stringify(response?.data?.token));
             AsyncStorage.setItem(KEY_USUARIO, JSON.stringify(response?.data?.usuario));
-
-            console.log('TOKEN', response.data.token);
         } catch (error) {
             console.error(error);
         }
