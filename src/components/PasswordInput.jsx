@@ -3,7 +3,7 @@ import React, {useCallback, useState} from 'react';
 import {StyleSheet} from 'react-native';
 import {TextInput} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-const PasswordInput = ({value, setValue}) => {
+const PasswordInput = ({value, setValue, label = 'Senha'}) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const tooglePasswordVisibility = useCallback(() => {
@@ -35,7 +35,7 @@ const PasswordInput = ({value, setValue}) => {
   return (
     <>
       <TextInput
-        label="Senha"
+        label={label}
         value={value}
         mode="flat"
         style={styles.passwordInput}

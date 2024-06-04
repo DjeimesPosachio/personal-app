@@ -75,13 +75,14 @@ const renderItem = ({ item, index }) => (
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     backgroundColor: '#181A20',
     justifyContent: 'center',
     paddingHorizontal: 20,
     paddingTop: 50,
   },
   content: {
+    flex: 1,
     backgroundColor: '#1F222A',
     padding: 10,
     borderTopLeftRadius: 30,

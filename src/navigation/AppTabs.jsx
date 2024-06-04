@@ -8,11 +8,11 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import TreinoScreen from '../screens/TreinoScreen';
 import DietaScreen from '../screens/DietaScreen';
-import PerfilScreen from '../screens/PerfilScreen';
+import StackPerfil from './StackPerfil';
 
 const Tab = createMaterialBottomTabNavigator();
 
-const AppStack = () => {
+const AppTabs = () => {
     return (
         <SafeAreaView style={styles.container}>
             <Tab.Navigator
@@ -41,7 +41,7 @@ const AppStack = () => {
                 />
                 <Tab.Screen
                     name="Perfil"
-                    component={PerfilScreen}
+                    component={StackPerfil}
                     options={{
                         tabBarIcon: ({ color }) => (
                             <Icon name="account" color={color} size={24} />
@@ -64,4 +64,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default AppStack;
+export default AppTabs;

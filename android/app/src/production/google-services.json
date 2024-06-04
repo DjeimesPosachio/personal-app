@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "399168962250",
+    "project_id": "personal-firebase-e9272",
+    "storage_bucket": "personal-firebase-e9272.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:399168962250:android:a04921e27f1f6e1831fe33",
+        "android_client_info": {
+          "package_name": "com.personalapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDC476Wmg98rKcdH5pRDSP2_FH23VaJOZs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
