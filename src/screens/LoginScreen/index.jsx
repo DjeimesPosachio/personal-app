@@ -7,6 +7,7 @@ import {
   View,
   SafeAreaView,
   Keyboard,
+  Alert,
 } from 'react-native';
 import {Button, Text} from 'react-native-paper';
 import PasswordInput from '../../components/PasswordInput';
@@ -20,7 +21,7 @@ const LoginScreen = ({navigation}) => {
   const {login, loading} = useContext(AuthContext);
 
   const [email, setEmail] = useState('cariani@gmail.com');
-  const [password, setPassword] = useState('123456');
+  const [password, setPassword] = useState('admin1234');
   const [showPassword, setShowPassword] = useState(true);
 
   useEffect(() => {
@@ -48,6 +49,8 @@ const LoginScreen = ({navigation}) => {
         index: 0,
         routes: [{name: 'Principal'}],
       });
+    } else {
+      Alert.alert('Usuário inexistente ou senha inválida');
     }
   };
 
@@ -101,10 +104,10 @@ const LoginScreen = ({navigation}) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignSelf: 'center',
-    width: '100%',
+    flexGrow: 1,
     backgroundColor: '#181A20',
+    justifyContent: 'center',
+    marginTop: -90,
   },
   logo: {
     width: 300,

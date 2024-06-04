@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable prettier/prettier */
 import React, {useRef, useState} from 'react';
-import {StyleSheet, View, FlatList, RefreshControl} from 'react-native';
+import {StyleSheet, View, FlatList, RefreshControl, Alert} from 'react-native';
 import {Text, Button} from 'react-native-paper';
 import {createAxios} from '../../utils/axios-helper';
 import PasswordInput from '../../components/PasswordInput';
@@ -30,8 +30,10 @@ const AlterarSenhaScreen = ({navigation}) => {
         senha: novaSenha,
         novaSenha: confirmarNovaSenha,
       });
-
-      console.log('Senha atualizada com sucesso!', response.data);
+      if (response.status === 200) {
+        navigation.navigate('Perfil');
+      }
+      Alert.alert('Senha atualizada com sucesso!', response.data);
     } catch (error) {
       console.error('Erro ao atualizar senha!', error);
     } finally {
@@ -57,7 +59,6 @@ const AlterarSenhaScreen = ({navigation}) => {
             setShowPassword={setShowPassword}
             mode="flat"
             textColor="#F7D100"
-            secureTextEntry
           />
         </View>
         <View style={styles.inputRow}>
@@ -69,7 +70,6 @@ const AlterarSenhaScreen = ({navigation}) => {
             setShowPassword={setShowPassword}
             mode="flat"
             textColor="#F7D100"
-            secureTextEntry
           />
         </View>
         <PasswordInput
@@ -80,7 +80,6 @@ const AlterarSenhaScreen = ({navigation}) => {
           setShowPassword={setShowPassword}
           mode="flat"
           textColor="#F7D100"
-          secureTextEntry
         />
       </View>
       <Button
@@ -93,14 +92,12 @@ const AlterarSenhaScreen = ({navigation}) => {
         SALVAR
       </Button>
       <Button
-          mode="text"
-          labelStyle={styles.cancelButton}
-          loading={loading}
-          disabled={loading}
-          onPress={handleCancel}
-        >
-          CANCELAR
-        </Button>
+        mode="text"
+        labelStyle={styles.cancelButton}
+        disabled={loading}
+        onPress={handleCancel}>
+        CANCELAR
+      </Button>
     </View>
   );
 
