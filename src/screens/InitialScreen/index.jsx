@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import React, {useContext, useEffect} from 'react';
 
-// import crashlytics from '@react-native-firebase/crashlytics';
+import crashlytics from '@react-native-firebase/crashlytics';
 import Config from 'react-native-config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {KEY_TOKEN, KEY_URL_PADRAO, KEY_USUARIO} from '../../consts';
@@ -37,7 +37,7 @@ const initApp = async ({navigation, setUserToken, setLoggedUser}) => {
       }, 2 * 1000);
     }
   } catch (err) {
-    // crashlytics().recordError(err);
+    crashlytics().recordError(err);
     if (__DEV__) {
       console.err('err', err);
     }
