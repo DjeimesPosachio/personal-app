@@ -13,7 +13,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {createAxios} from '../../utils/axios-helper';
 import ModalObservacao from './components/ModalObservacao';
 import {getUsuarioLogado} from '../../utils/async-storage-helper';
-import { formatDate } from '../../utils/date-helper';
 
 const TreinoScreen = () => {
   const [loading, setLoading] = useState(false);
@@ -98,9 +97,6 @@ const TreinoScreen = () => {
   const renderHeader = () => (
     <View style={styles.header}>
       <Text style={styles.headerText}>{usuarioLogado?.nome} - Treinos</Text>
-      <Text style={styles.dataText}>
-        {formatDate(new Date())}
-      </Text>
     </View>
   );
 
@@ -182,11 +178,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginTop: 20,
-  },
-  dataText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
   },
 });
 

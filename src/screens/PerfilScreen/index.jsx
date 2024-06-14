@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, {useContext, useRef, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {
   StyleSheet,
   View,
@@ -9,10 +9,13 @@ import {
 } from 'react-native';
 import {Text, Button} from 'react-native-paper';
 import {AuthContext} from '../../context/AuthContext';
+import { getUsuarioLogado } from '../../utils/async-storage-helper';
 
 const PerfilScreen = ({navigation}) => {
   const {logout} = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
+
+  const [usuarioLogado, setUsuarioLogado] = useState(null);
 
   const flatListRef = useRef(null);
 
@@ -27,6 +30,15 @@ const PerfilScreen = ({navigation}) => {
     });
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const user = await getUsuarioLogado();
+      setUsuarioLogado(user);
+    };
+    fetchData();
+
+  }, []);
+
   const handleAlterarSenha = () => {
     navigation.navigate('AlterarSenha');
   };
@@ -37,12 +49,12 @@ const PerfilScreen = ({navigation}) => {
       <View style={styles.line} />
       <View style={styles.userInfoContainer}>
         <View style={styles.userInfoRow}>
-          <Text style={styles.userInfoLabel}>Nome:</Text>
-          <Text style={styles.userInfoText}>John Doe</Text>
+          <Text style={styles.userInfoLabel}>Nome: </Text>
+          <Text style={styles.userInfoText}>{usuarioLogado?.nome}</Text>
         </View>
         <View style={styles.userInfoRow}>
           <Text style={styles.userInfoLabel}>Email:</Text>
-          <Text style={styles.userInfoText}>john.doe@example.com</Text>
+          <Text style={styles.userInfoText}>{usuarioLogado?.email}</Text>
         </View>
       </View>
       <Button

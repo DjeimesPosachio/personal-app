@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable prettier/prettier */
-import React, {useRef, useState} from 'react';
-import {StyleSheet, View, FlatList, RefreshControl, Alert} from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, View, Alert} from 'react-native';
 import {Text, Button} from 'react-native-paper';
 import {createAxios} from '../../utils/axios-helper';
 import PasswordInput from '../../components/PasswordInput';
@@ -12,8 +12,6 @@ const AlterarSenhaScreen = ({navigation}) => {
   const [senhaAtual, setSenhaAtual] = useState('');
   const [novaSenha, setNovaSenha] = useState('');
   const [confirmarNovaSenha, setConfirmarNovaSenha] = useState('');
-
-  const flatListRef = useRef(null);
 
   const axios = createAxios();
 
@@ -52,13 +50,7 @@ const AlterarSenhaScreen = ({navigation}) => {
       <View style={styles.line} />
       <View style={styles.inputContainer}>
         <View style={styles.inputRow}>
-          <PasswordInput
-            label="Senha Atual"
-            value={senhaAtual}
-            setValue={setSenhaAtual}
-            mode="flat"
-            textColor="#F7D100"
-          />
+          <PasswordInput value={senhaAtual} setValue={setSenhaAtual} />
         </View>
         <View style={styles.inputRow}>
           <PasswordInput
@@ -98,14 +90,7 @@ const AlterarSenhaScreen = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        ref={flatListRef}
-        ListHeaderComponent={renderHeader}
-        refreshing={loading}
-        keyExtractor={item => item.id}
-        contentContainerStyle={styles.content}
-        refreshControl={<RefreshControl refreshing={loading} />}
-      />
+      <View style={styles.content}>{renderHeader()}</View>
     </View>
   );
 };
