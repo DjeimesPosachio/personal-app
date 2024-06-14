@@ -11,7 +11,6 @@ const AlterarSenhaScreen = ({navigation}) => {
   const [loading, setLoading] = useState(false);
   const [senhaAtual, setSenhaAtual] = useState('');
   const [novaSenha, setNovaSenha] = useState('');
-  const [showPassword, setShowPassword] = useState(true);
   const [confirmarNovaSenha, setConfirmarNovaSenha] = useState('');
 
   const flatListRef = useRef(null);
@@ -57,8 +56,6 @@ const AlterarSenhaScreen = ({navigation}) => {
             label="Senha Atual"
             value={senhaAtual}
             setValue={setSenhaAtual}
-            showPassword={showPassword}
-            setShowPassword={setShowPassword}
             mode="flat"
             textColor="#F7D100"
           />
@@ -68,8 +65,6 @@ const AlterarSenhaScreen = ({navigation}) => {
             label="Nova Senha"
             value={novaSenha}
             setValue={setNovaSenha}
-            showPassword={showPassword}
-            setShowPassword={setShowPassword}
             mode="flat"
             textColor="#F7D100"
           />
@@ -78,8 +73,6 @@ const AlterarSenhaScreen = ({navigation}) => {
           label="Confirmar Nova Senha"
           value={confirmarNovaSenha}
           setValue={setConfirmarNovaSenha}
-          showPassword={showPassword}
-          setShowPassword={setShowPassword}
           mode="flat"
           textColor="#F7D100"
         />

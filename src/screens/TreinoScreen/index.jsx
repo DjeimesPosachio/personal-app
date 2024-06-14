@@ -12,12 +12,20 @@ import {List, Text} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {createAxios} from '../../utils/axios-helper';
 import ModalObservacao from './components/ModalObservacao';
+import {getUsuarioLogado} from '../../utils/async-storage-helper';
+import { formatDate } from '../../utils/date-helper';
 
 const TreinoScreen = () => {
   const [loading, setLoading] = useState(false);
+
   const [planejamento, setPlanejamento] = useState({});
+
   const [selectedExercicio, setSelectedExercicio] = useState(null);
+
+  const [usuarioLogado, setUsuarioLogado] = useState(null);
+
   const flatListRef = useRef(null);
+
   const axios = createAxios();
 
   const requestData = useCallback(() => {
@@ -33,7 +41,12 @@ const TreinoScreen = () => {
   }, [axios]);
 
   useEffect(() => {
-    requestData();
+    const fetchData = async () => {
+      const user = await getUsuarioLogado();
+      await requestData();
+      setUsuarioLogado(user);
+    };
+    fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -59,17 +72,16 @@ const TreinoScreen = () => {
         left={() => (
           <Text style={styles.sequenciaTreino}>{item.sequenciaTreino}</Text>
         )}>
-        {item.metricasExercicio.map((exercicio, metricasIndex) => (
+        {item?.metricasExercicios?.map((metricaExercicio, metricasIndex) => (
           <TouchableOpacity
             key={metricasIndex}
             style={styles.exercicioContainer}
-            onPress={() => openModal(exercicio)}
-            disabled={!exercicio?.observacao}
-            >
+            onPress={() => openModal(metricaExercicio)}
+            disabled={!metricaExercicio?.observacao}>
             <Text style={styles.exercicioDescricao}>
-              {`${exercicio.nomeExercicio} - ${exercicio.series} x ${exercicio.repeticoes}`}
+              {`${metricaExercicio?.exercicio?.nomeExercicio} - ${metricaExercicio?.series} x ${metricaExercicio?.repeticoes}`}
             </Text>
-            {exercicio?.observacao ? (
+            {metricaExercicio?.observacao ? (
               <Icon
                 name="eye"
                 size={20}
@@ -85,7 +97,10 @@ const TreinoScreen = () => {
 
   const renderHeader = () => (
     <View style={styles.header}>
-      <Text style={styles.headerText}>User u. - Treinos</Text>
+      <Text style={styles.headerText}>{usuarioLogado?.nome} - Treinos</Text>
+      <Text style={styles.dataText}>
+        {formatDate(new Date())}
+      </Text>
     </View>
   );
 
@@ -167,6 +182,11 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginTop: 20,
+  },
+  dataText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 

@@ -1,8 +1,7 @@
 /* eslint-disable prettier/prettier */
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   StyleSheet,
-  TouchableOpacity,
   Image,
   View,
   SafeAreaView,
@@ -12,33 +11,14 @@ import {
 import {Button, Text} from 'react-native-paper';
 import PasswordInput from '../../components/PasswordInput';
 import {AuthContext} from '../../context/AuthContext';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {KEY_URL_PADRAO} from '../../consts';
-import Config from 'react-native-config';
 import EmailInput from '../../components/EmailInput';
 
 const LoginScreen = ({navigation}) => {
   const {login, loading} = useContext(AuthContext);
 
-  const [email, setEmail] = useState('cariani@gmail.com');
-  const [password, setPassword] = useState('admin1234');
+  const [email, setEmail] = useState('djeimes_lyncon@hotmail.com');
+  const [password, setPassword] = useState('123456');
   const [showPassword, setShowPassword] = useState(true);
-
-  useEffect(() => {
-    const recuperarItem = async () => {
-      try {
-        const valor = await AsyncStorage.getItem(KEY_URL_PADRAO);
-
-        if (valor !== null) {
-          Config.URL_API = JSON.parse(valor).url;
-        }
-      } catch (erro) {
-        console.error('Erro ao recuperar o item do AsyncStorage:', erro);
-      }
-    };
-
-    recuperarItem();
-  }, []);
 
   const handleLogin = async () => {
     const response = await login(email, password);
@@ -80,24 +60,6 @@ const LoginScreen = ({navigation}) => {
           ENTRAR
         </Button>
       </View>
-
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate('SignUp');
-        }}>
-        <Text style={styles.esqueceuSenhaText}>
-          Esqueceu sua senha?{' '}
-          <Text style={styles.recuperarSenhaText}>RECUPERAR</Text>
-        </Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate('ChangeUrl');
-        }}>
-        <Text style={styles.esqueceuSenhaText}>
-          <Text style={styles.recuperarSenhaText}>Alterar URL</Text>
-        </Text>
-      </TouchableOpacity>
     </SafeAreaView>
   );
 };

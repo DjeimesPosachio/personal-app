@@ -1,59 +1,79 @@
 /* eslint-disable prettier/prettier */
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { StyleSheet, View, FlatList, RefreshControl } from 'react-native';
-import { List, Text } from 'react-native-paper';
-import { createAxios } from '../../utils/axios-helper';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {StyleSheet, View, FlatList, RefreshControl} from 'react-native';
+import {List, Text} from 'react-native-paper';
+import {createAxios} from '../../utils/axios-helper';
+import {getLabelEnumByKeyAndDomain} from '../../utils/enums';
+import { getUsuarioLogado } from '../../utils/async-storage-helper';
 
 const DietaScreen = () => {
-    const [loading, setLoading] = useState(false);
-    const [planejamento, setPlanejamento] = useState({});
-    const flatListRef = useRef(null);
+  const [loading, setLoading] = useState(false);
 
-    const axios = createAxios();
+  const [planejamento, setPlanejamento] = useState({});
 
-    const requestData = useCallback(() => {
-      setLoading(true);
-      axios
-        .get('/planejamento-dieta')
-        .then(response => {
-          setPlanejamento(response?.data);
-        })
-        .catch(error => console.log(error))
-        .finally(() => setLoading(false));
-    }, [axios]);
+  const [usuarioLogado, setUsuarioLogado] = useState(null);
 
-    useEffect(() => {
-      requestData();
+  const flatListRef = useRef(null);
+
+  const axios = createAxios();
+
+  const requestData = useCallback(() => {
+    setLoading(true);
+    axios
+      .get('/planejamento-dieta')
+      .then(response => {
+        setPlanejamento(response?.data);
+      })
+      .catch(error => console.log(error))
+      .finally(() => setLoading(false));
+  }, [axios]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const user = await getUsuarioLogado();
+        await requestData();
+        setUsuarioLogado(user);
+    };
+    fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+}, []);
 
-    const handleRefresh = useCallback(() => {
-      requestData();
-    }, [requestData]);
+  const handleRefresh = useCallback(() => {
+    requestData();
+  }, [requestData]);
 
-const renderItem = ({ item, index }) => (
-    <View style={[styles.cardContainer, index === 0 && { marginTop: 30 }]}>
+  const renderItem = ({item, index}) => (
+    <View style={[styles.cardContainer, index === 0 && {marginTop: 30}]}>
       <List.Accordion
         key={item.id}
         title={item.descricao}
-        description={item.tipoRefeicao}
+        description={getLabelEnumByKeyAndDomain(
+          'TipoRefeicao',
+          item.tipoRefeicao,
+        )}
         style={styles.cardContent}
         titleStyle={styles.descricaoText}
         descriptionStyle={styles.tipoRefeicaoText}
-        left={() => <Text style={styles.horaRefeicao}>{item.horaRefeicao}</Text>}
-      >
-          <View style={styles.exercicioContainer}>
-            <Text style={styles.alimentoDescricao}>
-              {item?.descricao}
-            </Text>
-          </View>
+        left={() => (
+          <Text style={styles.horaRefeicao}>{item.horaRefeicao}</Text>
+        )}>
+        {item?.itensRefeicao?.map(itemRefeicao => (
+          <Text style={styles.exercicioDescricao}>
+            {`${itemRefeicao?.descricao} - ${
+              itemRefeicao?.quantidade
+            } ${getLabelEnumByKeyAndDomain(
+              'UnidadeMedida',
+              itemRefeicao?.unidadeMedida,
+            )}`}
+          </Text>
+        ))}
       </List.Accordion>
     </View>
   );
 
   const renderHeader = () => (
     <View style={styles.header}>
-      <Text style={styles.headerText}>User u. - Dietas</Text>
+      <Text style={styles.headerText}>{usuarioLogado?.nome} - Dietas</Text>
     </View>
   );
 
@@ -67,7 +87,9 @@ const renderItem = ({ item, index }) => (
         refreshing={loading}
         keyExtractor={item => item.id}
         contentContainerStyle={styles.content}
-        refreshControl={<RefreshControl onRefresh={handleRefresh} refreshing={loading} />}
+        refreshControl={
+          <RefreshControl onRefresh={handleRefresh} refreshing={loading} />
+        }
       />
     </View>
   );
@@ -98,6 +120,12 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: 'bold',
     marginTop: 5,
+  },
+  exercicioDescricao: {
+    color: 'white',
+    fontSize: 16,
+    marginLeft: -20,
+    marginBottom: 10,
   },
   cardContainer: {
     backgroundColor: '#181A20',

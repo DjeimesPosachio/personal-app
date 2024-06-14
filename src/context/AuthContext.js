@@ -9,7 +9,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(false);
     const [userToken, setUserToken] = useState(null);
-    const [loaggedUser, setLoggedUser] = useState(null);
+    const [loggedUser, setLoggedUser] = useState(null);
 
     const axios = createAxios();
 
@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }) => {
     const getters = {
         loading,
         userToken,
-        loaggedUser,
+        loggedUser,
     };
 
     const setters = {

@@ -18,8 +18,6 @@ async function onTokenRefresh(token) {
 
   // eslint-disable-next-line no-extra-boolean-cast
   if (!!isAuth) {
-    console.log('ISAHHHHH', isAuth);
-
     await axios.put(
       '/notificacoes/token',
       {},
