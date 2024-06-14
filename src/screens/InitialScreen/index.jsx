@@ -4,7 +4,7 @@ import React, {useContext, useEffect} from 'react';
 import crashlytics from '@react-native-firebase/crashlytics';
 import Config from 'react-native-config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {KEY_TOKEN, KEY_URL_PADRAO, KEY_USUARIO} from '../../consts';
+import {KEY_TOKEN, KEY_URL_PADRAO} from '../../consts';
 import {getBundleId} from 'react-native-device-info';
 import {Dimensions, ImageBackground, StyleSheet} from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
@@ -15,11 +15,8 @@ const dimensions = Dimensions.get('window');
 const initApp = async ({navigation, setUserToken, setLoggedUser}) => {
   try {
     const token = await AsyncStorage.getItem(KEY_TOKEN);
-    // # Ver como recuperar
-    // const user = await AsyncStorage.getItem(JSON.parse(KEY_USUARIO));
 
     setUserToken(token);
-    // setLoggedUser(user);
 
     const bundleId = getBundleId();
 

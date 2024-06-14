@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { createContext, useState } from 'react';
 import { KEY_TOKEN, KEY_USUARIO } from '../consts';
 import { createAxios } from '../utils/axios-helper';
+import firebaseNotificationTokenHelper from '../utils/firebase-notification-token-helper';
 
 export const AuthContext = createContext();
 
@@ -23,7 +24,7 @@ export const AuthProvider = ({ children }) => {
             setLoggedUser(response?.data?.usuario);
             AsyncStorage.setItem(KEY_TOKEN, JSON.stringify(response?.data?.token));
             AsyncStorage.setItem(KEY_USUARIO, JSON.stringify(response?.data?.usuario));
-
+            firebaseNotificationTokenHelper.updateToken();
             return response;
         } catch (error) {
             console.error(error);
