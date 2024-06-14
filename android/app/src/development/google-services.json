@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "384459628119",
+    "project_id": "personal-firebase-dev",
+    "storage_bucket": "personal-firebase-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:384459628119:android:701a49bcf335e572980d12",
+        "android_client_info": {
+          "package_name": "com.personalapp.dev"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAD378PtJq3MUoO39W97Gf-ERzm5A4lumA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

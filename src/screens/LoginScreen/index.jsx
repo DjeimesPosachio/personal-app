@@ -2,32 +2,40 @@
 import React, {useContext, useState} from 'react';
 import {
   StyleSheet,
-  TouchableOpacity,
   Image,
   View,
-  KeyboardAvoidingView,
+  SafeAreaView,
+  Keyboard,
+  Alert,
 } from 'react-native';
 import {Button, Text} from 'react-native-paper';
 import PasswordInput from '../../components/PasswordInput';
 import {AuthContext} from '../../context/AuthContext';
-import EmailInput from '../../components/TelefoneInput';
+import EmailInput from '../../components/EmailInput';
 
 const LoginScreen = ({navigation}) => {
-  const {login} = useContext(AuthContext);
+  const {login, loading} = useContext(AuthContext);
 
-  const [email, setEmail] = useState('aluno@aluno.com.br');
-  const [password, setPassword] = useState('admin1234');
+  const [email, setEmail] = useState('djeimes_lyncon@hotmail.com');
+  const [password, setPassword] = useState('123456');
   const [showPassword, setShowPassword] = useState(true);
 
-  const handleLogin = () => {
-    login(email, password);
+  const handleLogin = async () => {
+    const response = await login(email, password);
+
+    if (response.status === 200) {
+      Keyboard.dismiss();
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'Principal'}],
+      });
+    } else {
+      Alert.alert('Usuário inexistente ou senha inválida');
+    }
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior="padding"
-      enabled={true}
-      style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Image source={require('../../assets/logo.png')} style={styles.logo} />
 
       <View style={styles.login}>
@@ -45,30 +53,23 @@ const LoginScreen = ({navigation}) => {
         <Button
           mode="contained"
           style={styles.loginButton}
+          labelStyle={styles.loginButtonText}
+          loading={loading}
+          disabled={loading}
           onPress={handleLogin}>
           ENTRAR
         </Button>
       </View>
-
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate('SignUp');
-        }}>
-        <Text style={styles.esqueceuSenhaText}>
-          Esqueceu sua senha?{' '}
-          <Text style={styles.recuperarSenhaText}>RECUPERAR</Text>
-        </Text>
-      </TouchableOpacity>
-    </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignSelf: 'center',
-    width: '100%',
+    flexGrow: 1,
     backgroundColor: '#181A20',
+    justifyContent: 'center',
+    marginTop: -90,
   },
   logo: {
     width: 300,
@@ -90,6 +91,10 @@ const styles = StyleSheet.create({
     marginTop: 20,
     backgroundColor: '#F7D100',
     marginBottom: 20,
+  },
+  loginButtonText: {
+    color: 'black',
+    fontSize: 16,
   },
   esqueceuSenhaText: {
     fontSize: 16,
