@@ -13,9 +13,6 @@ const DietaScreen = () => {
 
   const [usuarioLogado, setUsuarioLogado] = useState(null);
 
-  const [showNoPlanejamentoMessage, setShowNoPlanejamentoMessage] =
-    useState(false);
-
   const flatListRef = useRef(null);
 
   const axios = createAxios();
@@ -26,12 +23,10 @@ const DietaScreen = () => {
       .get('/planejamento-dieta')
       .then(response => {
         setPlanejamento(response?.data);
-        setShowNoPlanejamentoMessage(false);
       })
       .catch(error => {
         console.log(error);
         if (error.response && error.response.status === 500) {
-          setShowNoPlanejamentoMessage(true);
           setPlanejamento({treinos: []});
         }
       })
@@ -89,30 +84,29 @@ const DietaScreen = () => {
 
   return (
     <View style={styles.container}>
-      {showNoPlanejamentoMessage ? (
-        <View style={styles.contentSemPlanejamento}>
-          <Image
-            source={require('../../assets/sem-dados.png')}
-            style={styles.logo}
-          />
-          <Text style={styles.semPlanejamentoText}>
-            O aluno não possui planejamento de dieta.
-          </Text>
-        </View>
-      ) : (
-        <FlatList
-          ref={flatListRef}
-          data={planejamento?.refeicoes}
-          renderItem={renderItem}
-          ListHeaderComponent={renderHeader}
-          refreshing={loading}
-          keyExtractor={item => item.id}
-          contentContainerStyle={styles.content}
-          refreshControl={
-            <RefreshControl onRefresh={handleRefresh} refreshing={loading} />
-          }
-        />
-      )}
+      <FlatList
+        ref={flatListRef}
+        data={planejamento?.refeicoes}
+        renderItem={renderItem}
+        ListHeaderComponent={renderHeader}
+        refreshing={loading}
+        keyExtractor={item => item.id}
+        contentContainerStyle={styles.content}
+        ListEmptyComponent={
+          <View style={styles.contentSemPlanejamento}>
+            <Image
+              source={require('../../assets/sem-dados.png')}
+              style={styles.logo}
+            />
+            <Text style={styles.semPlanejamentoText}>
+              O aluno não possui planejamento de dieta.
+            </Text>
+          </View>
+        }
+        refreshControl={
+          <RefreshControl onRefresh={handleRefresh} refreshing={loading} />
+        }
+      />
     </View>
   );
 };

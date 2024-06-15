@@ -24,9 +24,6 @@ const TreinoScreen = () => {
 
   const [usuarioLogado, setUsuarioLogado] = useState(null);
 
-  const [showNoPlanejamentoMessage, setShowNoPlanejamentoMessage] =
-    useState(false);
-
   const flatListRef = useRef(null);
 
   const axios = createAxios();
@@ -37,13 +34,11 @@ const TreinoScreen = () => {
       .get('/planejamento-treino')
       .then(response => {
         setPlanejamento(response?.data);
-        setShowNoPlanejamentoMessage(false);
         flatListRef.current.scrollToEnd({animated: false});
       })
       .catch(error => {
         console.log(error);
         if (error.response && error.response.status === 500) {
-          setShowNoPlanejamentoMessage(true);
           setPlanejamento({treinos: []});
         }
       })
@@ -113,30 +108,29 @@ const TreinoScreen = () => {
 
   return (
     <View style={styles.container}>
-      {showNoPlanejamentoMessage ? (
-        <View style={styles.contentSemPlanejamento}>
-          <Image
-            source={require('../../assets/sem-dados.png')}
-            style={styles.logo}
-          />
-          <Text style={styles.semPlanejamentoText}>
-            O aluno não possui planejamento de treino.
-          </Text>
-        </View>
-      ) : (
-        <FlatList
-          ref={flatListRef}
-          data={planejamento?.treinos}
-          renderItem={renderItem}
-          ListHeaderComponent={renderHeader}
-          refreshing={loading}
-          keyExtractor={item => item.id.toString()}
-          contentContainerStyle={styles.content}
-          refreshControl={
-            <RefreshControl onRefresh={handleRefresh} refreshing={loading} />
-          }
-        />
-      )}
+      <FlatList
+        ref={flatListRef}
+        data={planejamento?.treinos}
+        renderItem={renderItem}
+        ListHeaderComponent={renderHeader}
+        refreshing={loading}
+        keyExtractor={item => item.id.toString()}
+        contentContainerStyle={styles.content}
+        ListEmptyComponent={
+          <View style={styles.contentSemPlanejamento}>
+            <Image
+              source={require('../../assets/sem-dados.png')}
+              style={styles.logo}
+            />
+            <Text style={styles.semPlanejamentoText}>
+              O aluno não possui planejamento de treino.
+            </Text>
+          </View>
+        }
+        refreshControl={
+          <RefreshControl onRefresh={handleRefresh} refreshing={loading} />
+        }
+      />
       <ModalObservacao exercicio={selectedExercicio} onClose={closeModal} />
     </View>
   );
