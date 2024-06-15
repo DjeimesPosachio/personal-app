@@ -16,8 +16,8 @@ import EmailInput from '../../components/EmailInput';
 const LoginScreen = ({navigation}) => {
   const {login, loading} = useContext(AuthContext);
 
-  const [email, setEmail] = useState('djeimes_lyncon@hotmail.com');
-  const [password, setPassword] = useState('123456');
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
   const [showPassword, setShowPassword] = useState(true);
 
   const handleLogin = async () => {

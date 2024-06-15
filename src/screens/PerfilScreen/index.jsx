@@ -119,13 +119,16 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   userInfoContainer: {
+    marginTop: 50,
     marginBottom: 20,
-    alignItems: 'flex-start',
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
   },
   userInfoRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 5,
+    marginBottom: 20,
   },
   userInfoLabel: {
     color: 'white',
@@ -141,7 +144,7 @@ const styles = StyleSheet.create({
   },
   alterarSenhaButton: {
     padding: 5,
-    marginTop: 190,
+    marginTop: 115,
     backgroundColor: '#F7D100',
     marginBottom: 20,
     width: '90%',

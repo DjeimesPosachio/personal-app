@@ -1,10 +1,10 @@
 /* eslint-disable prettier/prettier */
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {StyleSheet, View, FlatList, RefreshControl} from 'react-native';
+import {StyleSheet, View, FlatList, RefreshControl, Image} from 'react-native';
 import {List, Text} from 'react-native-paper';
 import {createAxios} from '../../utils/axios-helper';
 import {getLabelEnumByKeyAndDomain} from '../../utils/enums';
-import { getUsuarioLogado } from '../../utils/async-storage-helper';
+import {getUsuarioLogado} from '../../utils/async-storage-helper';
 
 const DietaScreen = () => {
   const [loading, setLoading] = useState(false);
@@ -12,6 +12,9 @@ const DietaScreen = () => {
   const [planejamento, setPlanejamento] = useState({});
 
   const [usuarioLogado, setUsuarioLogado] = useState(null);
+
+  const [showNoPlanejamentoMessage, setShowNoPlanejamentoMessage] =
+    useState(false);
 
   const flatListRef = useRef(null);
 
@@ -23,20 +26,27 @@ const DietaScreen = () => {
       .get('/planejamento-dieta')
       .then(response => {
         setPlanejamento(response?.data);
+        setShowNoPlanejamentoMessage(false);
       })
-      .catch(error => console.log(error))
+      .catch(error => {
+        console.log(error);
+        if (error.response && error.response.status === 500) {
+          setShowNoPlanejamentoMessage(true);
+          setPlanejamento({treinos: []});
+        }
+      })
       .finally(() => setLoading(false));
   }, [axios]);
 
   useEffect(() => {
     const fetchData = async () => {
       const user = await getUsuarioLogado();
-        await requestData();
-        setUsuarioLogado(user);
+      await requestData();
+      setUsuarioLogado(user);
     };
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-}, []);
+  }, []);
 
   const handleRefresh = useCallback(() => {
     requestData();
@@ -79,18 +89,30 @@ const DietaScreen = () => {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        ref={flatListRef}
-        data={planejamento?.refeicoes}
-        renderItem={renderItem}
-        ListHeaderComponent={renderHeader}
-        refreshing={loading}
-        keyExtractor={item => item.id}
-        contentContainerStyle={styles.content}
-        refreshControl={
-          <RefreshControl onRefresh={handleRefresh} refreshing={loading} />
-        }
-      />
+      {showNoPlanejamentoMessage ? (
+        <View style={styles.contentSemPlanejamento}>
+          <Image
+            source={require('../../assets/sem-dados.png')}
+            style={styles.logo}
+          />
+          <Text style={styles.semPlanejamentoText}>
+            O aluno não possui planejamento de dieta.
+          </Text>
+        </View>
+      ) : (
+        <FlatList
+          ref={flatListRef}
+          data={planejamento?.refeicoes}
+          renderItem={renderItem}
+          ListHeaderComponent={renderHeader}
+          refreshing={loading}
+          keyExtractor={item => item.id}
+          contentContainerStyle={styles.content}
+          refreshControl={
+            <RefreshControl onRefresh={handleRefresh} refreshing={loading} />
+          }
+        />
+      )}
     </View>
   );
 };
@@ -159,6 +181,27 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginTop: 20,
+  },
+  contentSemPlanejamento: {
+    flexGrow: 1,
+    backgroundColor: '#1F222A',
+    padding: 10,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+  },
+  logo: {
+    marginTop: 80,
+    width: 300,
+    height: 300,
+    alignSelf: 'center',
+  },
+  semPlanejamentoText: {
+    flex: 1,
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    color: 'white',
+    fontSize: 26,
+    marginTop: -200,
   },
 });
 
