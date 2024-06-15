@@ -37,7 +37,7 @@ const AppTabs = () => {
           component={DietaScreen}
           options={{
             tabBarIcon: ({color}) => (
-              <Icon name="food-apple" color={color} size={26} />
+              <Icon name="food" color={color} size={26} />
             ),
           }}
         />
