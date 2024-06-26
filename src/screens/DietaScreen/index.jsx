@@ -78,7 +78,8 @@ const DietaScreen = () => {
 
   const renderHeader = () => (
     <View style={styles.header}>
-      <Text style={styles.headerText}>{usuarioLogado?.nome} - Dietas</Text>
+      <Text style={styles.headerText}>{usuarioLogado?.nome}</Text>
+      <Text style={styles.headerTextType}>Dietas</Text>
     </View>
   );
 
@@ -176,6 +177,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 20,
   },
+  headerTextType: {
+    color: 'white',
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
   contentSemPlanejamento: {
     flexGrow: 1,
     backgroundColor: '#1F222A',
@@ -184,7 +190,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 30,
   },
   logo: {
-    marginTop: 80,
+    marginTop: 20,
     width: 300,
     height: 300,
     alignSelf: 'center',
@@ -195,7 +201,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
     color: 'white',
     fontSize: 26,
-    marginTop: -200,
+    marginTop: -130,
   },
 });
 

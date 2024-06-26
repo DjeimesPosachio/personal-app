@@ -119,8 +119,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   userInfoContainer: {
-    marginTop: 50,
-    marginBottom: 20,
+    marginTop: 30,
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
@@ -135,12 +134,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginRight: 5,
-    marginTop: 20,
   },
   userInfoText: {
     color: 'white',
-    fontSize: 20,
-    marginTop: 20,
+    fontSize: 18,
   },
   alterarSenhaButton: {
     padding: 5,
