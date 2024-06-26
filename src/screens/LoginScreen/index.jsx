@@ -6,7 +6,6 @@ import {
   View,
   SafeAreaView,
   Keyboard,
-  Alert,
 } from 'react-native';
 import {Button, Text} from 'react-native-paper';
 import PasswordInput from '../../components/PasswordInput';
@@ -29,8 +28,6 @@ const LoginScreen = ({navigation}) => {
         index: 0,
         routes: [{name: 'Principal'}],
       });
-    } else {
-      Alert.alert('Usuário inexistente ou senha inválida');
     }
   };
 

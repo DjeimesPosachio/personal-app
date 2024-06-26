@@ -6,6 +6,7 @@ import {Text, Button} from 'react-native-paper';
 import {createAxios} from '../../utils/axios-helper';
 import PasswordInput from '../../components/PasswordInput';
 import crashlytics from '@react-native-firebase/crashlytics';
+import { getErrorMessage } from '../../utils/error-helper';
 
 const AlterarSenhaScreen = ({navigation}) => {
   const [loading, setLoading] = useState(false);
@@ -34,7 +35,7 @@ const AlterarSenhaScreen = ({navigation}) => {
       Alert.alert('Senha atualizada com sucesso!', response.data);
     } catch (error) {
       crashlytics().recordError(error);
-      console.error('Erro ao atualizar senha!', error);
+      getErrorMessage(error, 'Erro ao atualizar senha!');
     } finally {
       setLoading(false);
     }

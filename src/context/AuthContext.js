@@ -4,6 +4,7 @@ import React, { createContext, useState } from 'react';
 import { KEY_TOKEN, KEY_USUARIO } from '../consts';
 import { createAxios } from '../utils/axios-helper';
 import firebaseNotificationTokenHelper from '../utils/firebase-notification-token-helper';
+import { getErrorMessage } from '../utils/error-helper';
 
 export const AuthContext = createContext();
 
@@ -15,6 +16,7 @@ export const AuthProvider = ({ children }) => {
     const axios = createAxios();
 
     const login = async (email, password) => {
+        setLoading(true);
         try {
             const response = await axios.post('/auth/login', {
                 email: email,
@@ -27,8 +29,10 @@ export const AuthProvider = ({ children }) => {
             firebaseNotificationTokenHelper.updateToken();
             return response;
         } catch (error) {
-            console.error(error);
+            getErrorMessage(error, 'Usuário inexistente ou senha inválida');
             return false;
+        } finally {
+            setLoading(false);
         }
     };
 
